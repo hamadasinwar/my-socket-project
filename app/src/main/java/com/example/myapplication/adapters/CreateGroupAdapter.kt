@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.app.App
 import com.example.myapplication.models.User
 import com.example.myapplication.models.UserGroup
 import kotlinx.android.synthetic.main.group_item.view.*
@@ -15,6 +16,7 @@ class CreateGroupAdapter(val activity: Activity, private val data:MutableList<Us
     :RecyclerView.Adapter<CreateGroupAdapter.CreateGroupViewHolder>() {
 
     private val d = mutableListOf<UserGroup>()
+    private val user = (activity.application as App).getUser()
 
     inner class CreateGroupViewHolder(item: View): RecyclerView.ViewHolder(item){
         val name: TextView = item.usernameGroup
@@ -52,6 +54,7 @@ class CreateGroupAdapter(val activity: Activity, private val data:MutableList<Us
     }
     fun getData():MutableList<User>{
         val da = mutableListOf<User>()
+        da.add(user)
         for (g in d){
             for (u in data){
                 if (g.user.id == u.id && g.isChecked){

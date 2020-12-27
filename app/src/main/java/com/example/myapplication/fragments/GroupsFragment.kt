@@ -29,6 +29,9 @@ class GroupsFragment : Fragment(), GroupAdapter.OnClickItem {
         app = act.application as App
         groups = app.getAllGroups()
 
+        if (groups.isEmpty()){
+            root.text_no_groups.visibility = View.VISIBLE
+        }
         val adapter = GroupAdapter(act, groups, this)
         root.rvGroups.layoutManager = LinearLayoutManager(act)
         root.rvGroups.adapter = adapter

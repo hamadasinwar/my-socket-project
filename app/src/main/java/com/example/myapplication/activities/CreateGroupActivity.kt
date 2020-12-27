@@ -21,8 +21,10 @@ class CreateGroupActivity : AppCompatActivity() {
 
     private lateinit var app:App
     private lateinit var user: User
+    private lateinit var users:MutableList<User>
     private lateinit var data:MutableList<User>
     private lateinit var db:FirebaseFirestore
+    private lateinit var i:Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +32,10 @@ class CreateGroupActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         app = this.application as App
         user = app.getUser()
+        users = app.getAllUsers()
         data = app.getAllUsers().distinct() as MutableList
+        i = Intent(this, MainActivity::class.java)
+        i.putExtra("page", 1)
 
         val adapter = CreateGroupAdapter(this, data)
         rvGroup.layoutManager = LinearLayoutManager(this)
@@ -58,8 +63,6 @@ class CreateGroupActivity : AppCompatActivity() {
                     )
                     db.collection("Groups").add(groupData).addOnSuccessListener {
                         app.addGroup(Group(groupData["id"]!!, groupData["name"]!!, adapter.getData()))
-                        val i = Intent(this, MainActivity::class.java)
-                        i.putExtra("page", 1)
                         startActivity(i)
                     }.addOnFailureListener { exception ->
                         Log.e("hmd", "${exception.message}")

@@ -82,7 +82,7 @@ class SplashActivity : AppCompatActivity() {
                         }
                     }
                     if (json.contains(user.id)){
-                        app.addGroup(Group(document.get("id").toString(), document.get("name").toString(), groupUsers))
+                        app.addGroup(Group(document.get("id").toString(), document.get("name").toString(), groupUsers.distinct() as MutableList))
                     }
                 }
                 connectSocket()

@@ -42,11 +42,21 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/text_no_groups"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="you are not in any group, click the plus to add one"
+        android:textColor="@color/textPrimaryLight"
+        android:visibility="gone"
+        android:layout_below="@+id/groupsToolbar"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGroups"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/groupsToolbar"/>
+        android:layout_below="@+id/text_no_groups"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add_group"

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#1C9EDA</color>
+    <color name="mainBackground">#050505</color>
+    <color name="typing">#FF36C44B</color>
+    <color name="colorApp">#1C9EDA</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+
+    <color name="inputHint">#5C707070</color>
+    <color name="inputText">#707070</color>
+    <color name="textPrimary">#333333</color>
+    <color name="textPrimaryLight">#BEBEBE</color>
+    <color name="textContrast">#F5F5F5</color>
+    <color name="messagePartnerBackground">#EEEEEE</color>
+    <color name="messagePartnerStroke">#707070</color>
+    <color name="messageSenderBackground">@color/colorPrimary</color>
+    <color name="messageSenderStroke">#707070</color>
+
+    <color name="profilePrimaryDark">#FF3B30</color>
+
+    <color name="profileAccentColor">#F7F7F7</color>
+
+    <color name="whiteTextColor">#fff</color>
+
+    <color name="profileBackground">#fff</color>
+
+    <color name="blackTextColor">#000</color>
+
+    <color name="profileEditTextColor">#707070</color>
+</resources>

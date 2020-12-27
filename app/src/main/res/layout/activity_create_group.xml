@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/mainBackground"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".activities.CreateGroupActivity">
+
+    <EditText
+        android:id="@+id/etGroupName"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_edit_text"
+        android:fontFamily="@font/segoe_ui_regular"
+        android:hint="Group Name"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/textPrimaryLight" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etGroupName"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="@dimen/marginMedium"
+        android:layout_marginBottom="@dimen/marginMedium"
+        android:layout_marginEnd="@dimen/marginMedium"
+        app:cardBackgroundColor="@color/mainBackground"
+        android:layout_alignParentBottom="true">
+
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/btn_create_group"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/button"
+            android:fontFamily="@font/segoe_ui_regular"
+            android:gravity="center"
+            android:text="create group"
+            app:spinning_bar_color="#FFF"
+            app:spinning_bar_padding="6dp" />
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

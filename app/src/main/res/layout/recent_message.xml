@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardRecent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        app:cardCornerRadius="33dp">
+
+        <ImageView
+            android:id="@+id/recentImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/mainBackground"
+            android:src="@drawable/ic_person" />
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/recentReceiver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:fontFamily="@font/segoe_ui_bold"
+            android:textColor="@color/textPrimaryLight"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/recentMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/segoe_ui_regular"
+            android:padding="2dp"
+            android:textColor="@color/textPrimaryLight" />
+
+    </LinearLayout>
+
+</LinearLayout>

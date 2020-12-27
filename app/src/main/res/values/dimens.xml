@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Margin -->
+    <dimen name="marginExtraSmall">4dp</dimen>
+    <dimen name="marginSmall">8dp</dimen>
+    <dimen name="marginRegular">12dp</dimen>
+    <dimen name="marginMedium">16dp</dimen>
+    <dimen name="marginXLarge">32dp</dimen>
+
+    <!-- Padding -->
+    <dimen name="paddingSmall">8dp</dimen>
+    <dimen name="paddingRegular">12dp</dimen>
+    <dimen name="paddingMedium">16dp</dimen>
+    <dimen name="paddingLarge">32dp</dimen>
+
+    <!-- Text -->
+    <dimen name="textExtraSmall">10sp</dimen>
+    <dimen name="textSmall">12sp</dimen>
+    <dimen name="textRegular">15sp</dimen>
+    <dimen name="textMedium">18sp</dimen>
+    <dimen name="textLarge">35sp</dimen>
+
+    <!-- Corners -->
+    <dimen name="cornerRegular">5dp</dimen>
+
+    <!-- Border -->
+    <dimen name="borderRegular">1dp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="elevationToolbar">4dp</dimen>
+    <dimen name="elevationFAB">8dp</dimen>
+
+    <!-- Divider -->
+    <dimen name="dividerRegular">1dp</dimen>
+
+    <!--  Contacts Screen  -->
+    <dimen name="iconImageHeight">40dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="headerTextSize">28sp</dimen>
+</resources>

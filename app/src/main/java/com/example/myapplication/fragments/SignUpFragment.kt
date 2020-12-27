@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,9 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import com.example.myapplication.R
-import com.example.myapplication.activities.MainActivity
+import com.example.myapplication.activities.SplashActivity
 import com.example.myapplication.app.App
 import com.example.myapplication.models.User
 import com.google.android.material.snackbar.Snackbar
@@ -22,10 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.labo.kaji.fragmentanimations.MoveAnimation
 import kotlinx.android.synthetic.main.fragment_sign_up.*
-import kotlinx.android.synthetic.main.fragment_sign_up.etEmail
-import kotlinx.android.synthetic.main.fragment_sign_up.etPassword
 import kotlinx.android.synthetic.main.fragment_sign_up.view.*
-import kotlinx.android.synthetic.main.fragment_sign_up.view.etEmail
 import java.util.*
 
 class SignUpFragment : Fragment() {
@@ -90,7 +87,7 @@ class SignUpFragment : Fragment() {
                 )
                 auth.createUserWithEmailAndPassword(user.email, user.password).addOnSuccessListener {
                     db.collection("Users").add(data).addOnSuccessListener {
-                        val i = Intent(activity, MainActivity::class.java)
+                        val i = Intent(activity, SplashActivity::class.java)
                         for (u in allUsers){
                             if (u.email == root.etEmail.text.toString()){
                                 (act.application as App).setUser(u)
@@ -101,9 +98,12 @@ class SignUpFragment : Fragment() {
                     }.addOnFailureListener{exception ->
                         Log.e("hmd", exception.message.toString())
                         showSnackBar("Error")
+                        root.btn_sign_up.stopAnimation()
                     }
                 }.addOnFailureListener{exception ->
                     Log.e("hmd", exception.message.toString())
+                    showSnackBar("Error")
+                    root.btn_sign_up.stopAnimation()
                 }
             }
         }

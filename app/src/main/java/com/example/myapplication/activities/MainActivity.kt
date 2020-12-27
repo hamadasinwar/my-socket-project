@@ -1,6 +1,8 @@
 package com.example.myapplication.activities
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
@@ -64,17 +66,19 @@ class MainActivity : AppCompatActivity(), AnimatedBottomBar.OnTabSelectListener 
 
     override fun onDestroy() {
         super.onDestroy()
-        if (isFinishing) {
-            val u = JSONObject()
-            u.put("id", this.user.id)
-            u.put("name", this.user.name)
-            u.put("email", this.user.email)
-            try {
-                mSocket.emit("disConnect user", u)
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
-            mSocket.disconnect()
+        val u = JSONObject()
+        u.put("id", this.user.id)
+        u.put("name", this.user.name)
+        u.put("email", this.user.email)
+        val sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+        val editor = sharedPreference.edit()
+        editor.putBoolean("hasConnection", false)
+        editor.apply()
+        try {
+            mSocket.emit("disConnect user", u)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        mSocket.disconnect()
         }
     }
 

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.R
 import com.example.myapplication.app.App
@@ -47,18 +48,11 @@ class SplashActivity : AppCompatActivity() {
         val sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
         editor = sharedPreference.edit()
 
-        if (hasConnection == null){
-            hasConnection = false
-            editor.putBoolean("hasConnection", false)
-        }else{
-            hasConnection = sharedPreference.getBoolean("hasConnection", false)
-        }
-
         (this.application as App).setUser(User("", "", "", "", "", "", ""))
 
         if (email.isNullOrEmpty()){
             i = Intent(this, LoginActivity::class.java)
-            loadData()
+            startActivity(i)
         }else{
             i = Intent(this, MainActivity::class.java)
             loadData()
@@ -97,21 +91,16 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun connectSocket(){
-        if (hasConnection!!) {
-            ////
-        } else {
-            mSocket.connect()
-            mSocket.on("connect user", onNewUser)
-
-            val u = JSONObject()
-            u.put("id", app.getUser().id)
-            u.put("name", app.getUser().name)
-            u.put("email", app.getUser().email)
-            try {
-                mSocket.emit("connect user", u)
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
+        mSocket.connect()
+        mSocket.on("connect user", onNewUser)
+        val u = JSONObject()
+        u.put("id", app.getUser().id)
+        u.put("name", app.getUser().name)
+        u.put("email", app.getUser().email)
+        try {
+            mSocket.emit("connect user", u)
+        } catch (e: JSONException) {
+            Log.e("hmd", "${e.message}")
         }
         editor.putBoolean("hasConnection", true)
         hasConnection = true

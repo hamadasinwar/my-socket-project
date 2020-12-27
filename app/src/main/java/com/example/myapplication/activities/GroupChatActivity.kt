@@ -137,7 +137,7 @@ class GroupChatActivity : AppCompatActivity() {
                 if (id == uniqueId) {
                     typingOrNot = false
                 } else {
-                    if (userChatID == user!!.id){
+                    if (userChatID == group.id){
                         title = userName
                     }
                 }

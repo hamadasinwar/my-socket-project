@@ -10,9 +10,9 @@ class App:Application(){
 
     private var mSocket: Socket? = IO.socket("http://192.168.1.22:4040")
     private lateinit var user : User
-    private val allUsers = mutableListOf<User>()
-    private val connectedUsers = mutableListOf<User>()
-    private val allGroups = mutableListOf<Group>()
+    private var allUsers = mutableListOf<User>()
+    private var connectedUsers = mutableListOf<User>()
+    private var allGroups = mutableListOf<Group>()
 
     fun getSocket(): Socket {
         return mSocket!!
@@ -55,6 +55,12 @@ class App:Application(){
 
     fun getAllGroups():MutableList<Group>{
         return allGroups
+    }
+
+    fun clearData(){
+        allUsers = mutableListOf()
+        connectedUsers = mutableListOf()
+        allGroups = mutableListOf()
     }
 
 }

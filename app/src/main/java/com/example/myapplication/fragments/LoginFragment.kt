@@ -10,14 +10,13 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
-import com.example.myapplication.activities.MainActivity
+import com.example.myapplication.activities.SplashActivity
 import com.example.myapplication.app.App
 import com.example.myapplication.models.User
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.labo.kaji.fragmentanimations.MoveAnimation
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
 
@@ -45,10 +44,11 @@ class LoginFragment : Fragment() {
                                 (act.application as App).setUser(u)
                             }
                         }
-                        startActivity(Intent(activity, MainActivity::class.java))
+                        startActivity(Intent(activity, SplashActivity::class.java))
                         act.finish()
                     }.addOnFailureListener{
                         showSnackBar("Error!!")
+                        root.btn_sign_in.stopAnimation()
                     }
             }else{
                 errorAnim()

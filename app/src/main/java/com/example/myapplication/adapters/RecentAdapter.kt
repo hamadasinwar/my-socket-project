@@ -2,6 +2,7 @@ package com.example.myapplication.adapters
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.models.User
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.recent_message.view.*
 
 class RecentAdapter(private val activity: Activity, private var data:MutableList<User>, private val onClickItem: OnClickItem)
@@ -36,12 +38,15 @@ class RecentAdapter(private val activity: Activity, private var data:MutableList
     override fun onBindViewHolder(holder: RecentViewHolder, position: Int) {
         holder.name.text = data[position].name
         holder.message.text = "say hi to ${data[position].name}"
-        holder.image.setImageResource(R.mipmap.ic_launcher)
         holder.card.setOnClickListener {
             onClickItem.onRecentClick(position)
         }
-        holder.image.setImageResource(R.drawable.ic_person)
-        holder.image.setPadding(30, 30, 30, 30)
+        if (data[position].image == ""){
+            holder.image.setImageResource(R.drawable.ic_person)
+            holder.image.setPadding(30, 30, 30, 30)
+        }else{
+            Picasso.get().load(Uri.parse(data[position].image)).into(holder.image)
+        }
     }
 
     interface OnClickItem{

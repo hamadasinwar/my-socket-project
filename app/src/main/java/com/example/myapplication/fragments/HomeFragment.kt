@@ -20,6 +20,7 @@ import com.example.myapplication.adapters.OnlineAdapter
 import com.example.myapplication.adapters.RecentAdapter
 import com.example.myapplication.app.App
 import com.example.myapplication.models.User
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import java.util.*
 
@@ -44,13 +45,17 @@ class HomeFragment : Fragment(), OnlineAdapter.OnClickItem, RecentAdapter.OnClic
         (act as MainActivity).setSupportActionBar(root.homeToolbar)
 
         if (user.image != ""){
-            root.profileImage.setImageURI(Uri.parse(user.image))
+            Picasso.get().load(Uri.parse(user.image)).into(root.profileImage)
         }else{
             root.profileImage.setImageResource(R.drawable.ic_person)
         }
 
         root.search_button.setOnClickListener {
-            root.etSearch.visibility = View.VISIBLE
+            if (root.etSearch.visibility == View.VISIBLE){
+                root.etSearch.visibility = View.GONE
+            }else{
+                root.etSearch.visibility = View.VISIBLE
+            }
         }
 
         root.etSearch.addTextChangedListener(object : TextWatcher {

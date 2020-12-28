@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +19,16 @@ import com.example.myapplication.activities.LoginActivity
 import com.example.myapplication.activities.MainActivity
 import com.example.myapplication.adapters.AppBarStateChangeListener
 import com.example.myapplication.app.App
+import com.example.myapplication.models.User
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.appbar.AppBarLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_profile.view.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 
@@ -36,6 +41,7 @@ class ProfileFragment : Fragment() {
     private lateinit var act: Activity
     private lateinit var slidDown: Animation
     private lateinit var app:App
+    private lateinit var user:User
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_profile, container, false)
@@ -43,13 +49,13 @@ class ProfileFragment : Fragment() {
         act = activity as Activity
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-        storage = FirebaseStorage.getInstance()
-        storageReference = storage.getReference("uploads/")
+        storage = Firebase.storage
+        storageReference = storage.reference
         app = (act.application as App)
         (act as MainActivity).setSupportActionBar(root.toolbar)
         (act as MainActivity).supportActionBar!!.title = "Account Info"
         slidDown = AnimationUtils.loadAnimation(act, R.anim.slide_down)
-        val user = app.getUser()
+        user = app.getUser()
 
         root.name.text = user.name
         root.email.text = user.email
@@ -58,7 +64,7 @@ class ProfileFragment : Fragment() {
         root.profileGender.text = user.gender
         root.profileAge.text = user.age
         if (user.image != ""){
-            root.profileImage.setImageURI(Uri.parse(user.image))
+            Picasso.get().load(Uri.parse(user.image)).into(root.profileImage)
         }else{
             root.profileImage.setImageResource(R.drawable.ic_person)
         }
@@ -86,7 +92,7 @@ class ProfileFragment : Fragment() {
                         Activity.RESULT_OK -> {
                             val fileUri = data?.data
                             root.profileImage.setImageURI(fileUri)
-                            updateImage(user.id, fileUri!!.path!!)
+                            updateImage(fileUri!!)
                         }
                         ImagePicker.RESULT_ERROR -> {
                             Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
@@ -102,14 +108,19 @@ class ProfileFragment : Fragment() {
         return root
     }
 
-    private fun updateImage(id: String, img: String){
-        db.collection("Users").get().addOnSuccessListener { querySnapshot ->
-            for (doc in querySnapshot){
-                if (doc.getString("id") == id){
-                    db.collection("Users").document(doc.id).update("image", img)
-                    (act.application as App).updateUser(img)
+    private fun updateImage(img: Uri){
+        storageReference.child("profile/${user.id}").putFile(img).addOnSuccessListener {snapshot->
+            snapshot.storage.downloadUrl.addOnSuccessListener {uri->
+                db.collection("Users").whereEqualTo("id", user.id).get().addOnSuccessListener { querySnapshot->
+                    db.collection("Users").document(querySnapshot.documents[0].id).update("image", uri.toString()).addOnSuccessListener {
+                        Log.e("hmd", "DONE")
+                    }.addOnFailureListener{ exception ->
+                        Log.e("hmd", "${exception.message}")
+                    }
                 }
             }
+        }.addOnFailureListener{ exception ->
+            Log.e("hmd", "${exception.message}")
         }
     }
 
@@ -128,9 +139,7 @@ class ProfileFragment : Fragment() {
             startActivity(Intent(act, LoginActivity::class.java))
             act.finish()
         }
-        builder.setNegativeButton("Cancel"){_, _ ->
-
-        }
+        builder.setNegativeButton("Cancel"){_, _ -> }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()

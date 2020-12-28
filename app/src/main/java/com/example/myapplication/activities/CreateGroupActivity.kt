@@ -34,6 +34,7 @@ class CreateGroupActivity : AppCompatActivity() {
         user = app.getUser()
         users = app.getAllUsers()
         data = app.getAllUsers().distinct() as MutableList
+        data.remove(user)
         i = Intent(this, MainActivity::class.java)
         i.putExtra("page", 1)
 

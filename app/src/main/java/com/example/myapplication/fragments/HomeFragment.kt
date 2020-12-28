@@ -40,7 +40,6 @@ class HomeFragment : Fragment(), OnlineAdapter.OnClickItem, RecentAdapter.OnClic
         app = (act.application as App)
         user = app.getUser()
         allUsers = (act.application as App).getAllUsers()
-        val user = (act.application as App).getUser()
         allUsers.remove(user)
         (act as MainActivity).setSupportActionBar(root.homeToolbar)
 

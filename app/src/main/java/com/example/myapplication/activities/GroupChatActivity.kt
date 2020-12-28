@@ -111,14 +111,14 @@ class GroupChatActivity : AppCompatActivity() {
             val username: String
             val message: String
             val id: String
-            val userChatID: String
+            val groupChatID: String
             try {
                 username = data.getString("username")
                 message = data.getString("message")
                 id = data.getString("uniqueId")
-                userChatID = data.get("userChat").toString()
+                groupChatID = data.get("userChat").toString()
                 val format = MessageFormat(id, username, message)
-                if (ids.contains(user!!.id)){
+                if (ids.contains(user!!.id) && groupChatID == group.id){
                     messageAdapter.add(format)
                 }
             } catch (e: Exception) {

@@ -2,7 +2,6 @@ package com.example.myapplication.activities
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
@@ -34,6 +33,7 @@ class MainActivity : AppCompatActivity(), AnimatedBottomBar.OnTabSelectListener 
         mSocket = app.getSocket()
         if (index == 1){
             loadFragment(GroupsFragment())
+            navigation.selectTabById(R.id.groupPage)
         }else{
             loadFragment(HomeFragment())
         }

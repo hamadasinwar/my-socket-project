@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingVertical="10dp"
-    android:paddingStart="15dp"
+    android:paddingStart="5dp"
     android:paddingEnd="60dp"
     android:clipToPadding="false">
 
@@ -30,20 +30,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="4dp"
+        android:textColor="@color/textPrimary"
         android:text="Ahmed"/>
 
-    <TextView
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/message_body"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/name"
-        android:layout_alignStart="@+id/name"
-        android:background="@drawable/their_message"
-        android:paddingVertical="12dp"
-        android:paddingHorizontal="16dp"
-        android:textColor="@color/textContrast"
-        android:elevation="2dp"
-        android:textSize="18sp"
-        android:text="How are you doing? This is a long message that should probably wrap."
-        />
+        android:background="@color/textPrimary"
+        android:layout_marginStart="35dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="20dp">
+
+        <ImageView
+            android:id="@+id/message_body"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_image"/>
+
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

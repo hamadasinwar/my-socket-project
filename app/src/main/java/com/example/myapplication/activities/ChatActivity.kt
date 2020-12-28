@@ -1,7 +1,10 @@
 package com.example.myapplication.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -9,18 +12,30 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toBitmap
 import com.example.myapplication.R
 import com.example.myapplication.adapters.MessageAdapter
 import com.example.myapplication.app.App
 import com.example.myapplication.models.MessageFormat
 import com.example.myapplication.models.User
+import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.Socket
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.image_send.*
+import kotlinx.android.synthetic.main.image_send.view.*
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.util.*
+
 
 @Suppress("DEPRECATION")
 class ChatActivity : AppCompatActivity() {
@@ -54,13 +69,49 @@ class ChatActivity : AppCompatActivity() {
         mSocket.connect()
         mSocket.on("chat message", onNewMessage)
         mSocket.on("on typing", onTyping)
+        mSocket.on("image message", onNewImage)
         hasConnection = true
 
         val messageFormatList: List<MessageFormat> = ArrayList()
         messageAdapter = MessageAdapter(this, R.layout.item_message, messageFormatList)
         messageListView.adapter = messageAdapter
+        messageAdapter.setImage(userChat.image)
+
+        messageListView.setOnItemClickListener { parent, view, position, id ->
+
+        }
+
         sendButton.setOnClickListener {
             sendMessage()
+        }
+
+        sendImage.setOnClickListener {
+            ImagePicker.with(this).compress(1024)
+                .maxResultSize(1080, 1080)
+                .start { resultCode, data ->
+                    when (resultCode) {
+                        Activity.RESULT_OK -> {
+                            val fileUri = data?.data
+                            val v = layoutInflater.inflate(R.layout.image_send, null)
+                            v.imageSend.setImageURI(fileUri)
+                            val builder = AlertDialog.Builder(this)
+                            builder.setTitle("Send Image?")
+                            builder.setView(v)
+                            builder.setPositiveButton("Yes"){_, _ ->
+                                sendImage(encodeImage(v.imageSend))
+                            }
+                            builder.setNegativeButton("Cancel"){_, _ ->}
+                            val alertDialog: AlertDialog = builder.create()
+                            alertDialog.setCancelable(false)
+                            alertDialog.show()
+                        }
+                        ImagePicker.RESULT_ERROR -> {
+                            Toast.makeText(this, ImagePicker.getError(data), Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                }
+
         }
 
         onTypeButtonEnable()
@@ -90,12 +141,12 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private var onNewMessage = Emitter.Listener { args ->
-        runOnUiThread(Runnable {
+        runOnUiThread {
             val data = args[0] as JSONObject
             val username: String
             val message: String
             val id: String
-            val userChatID:String
+            val userChatID: String
             try {
                 username = data.getString("username")
                 message = data.getString("message")
@@ -103,13 +154,13 @@ class ChatActivity : AppCompatActivity() {
                 userChatID = data.get("userChat").toString()
                 val format = MessageFormat(id, username, message)
 
-                if ((userChatID == user.id || id == user.id) && userChatID!=id){
+                if ((userChatID == user.id || id == user.id) && userChatID != id) {
                     messageAdapter.add(format)
                 }
             } catch (e: Exception) {
-                return@Runnable
+                Log.e("hmd", "Error: ${e.message}")
             }
-        })
+        }
     }
     private var onTyping = Emitter.Listener { args ->
         runOnUiThread {
@@ -154,6 +205,29 @@ class ChatActivity : AppCompatActivity() {
             }
         }
     }
+    private var onNewImage = Emitter.Listener { args ->
+        runOnUiThread {
+            val data = args[0] as JSONObject
+            val username: String
+            val image: String
+            val id: String
+            val userChatID: String
+            try {
+                username = data.getString("username")
+                image = data.getString("image")
+                id = data.getString("uniqueId")
+                userChatID = data.get("userChat").toString()
+                val format = MessageFormat(id, username, image)
+                format.setIsImage()
+
+                if ((userChatID == user.id || id == user.id) && userChatID != id) {
+                    messageAdapter.add(format)
+                }
+            } catch (e: Exception) {
+                Log.e("hmd", "Error: ${e.message}")
+            }
+        }
+    }
 
     private fun sendMessage() {
         val message = textField.text.toString().trim { it <= ' ' }
@@ -171,6 +245,27 @@ class ChatActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         mSocket.emit("chat message", jsonObject)
+    }
+
+    private fun sendImage(path: String){
+        val sendData = JSONObject()
+        try {
+            sendData.put("image", path)
+            sendData.put("username", username)
+            sendData.put("uniqueId", uniqueId)
+            sendData.put("userChat", userChat.id)
+            mSocket.emit("image message", sendData)
+        } catch (e: JSONException) {
+            Log.e("hmd", "Error: ${e.message}")
+        }
+    }
+
+    private fun encodeImage(image:ImageView):String{
+        val bm = image.drawable.toBitmap()
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b: ByteArray = baos.toByteArray()
+        return Base64.getEncoder().encodeToString(b)
     }
 
     override fun onDestroy() {

@@ -48,10 +48,11 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardImage"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="15dp"
                         app:cardElevation="10dp"
-                        app:cardCornerRadius="50dp">
+                        app:cardCornerRadius="75dp">
 
                         <ImageView
                             android:id="@+id/profileImage"

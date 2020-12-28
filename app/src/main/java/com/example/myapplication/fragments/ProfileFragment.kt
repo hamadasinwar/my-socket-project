@@ -1,6 +1,9 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.myapplication.fragments
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -109,11 +112,17 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateImage(img: Uri){
+
+        val progressDialog = ProgressDialog(act)
+        progressDialog.setTitle("Uploading Image...")
+        progressDialog.show()
+
         storageReference.child("profile/${user.id}").putFile(img).addOnSuccessListener {snapshot->
+            progressDialog.dismiss()
             snapshot.storage.downloadUrl.addOnSuccessListener {uri->
                 db.collection("Users").whereEqualTo("id", user.id).get().addOnSuccessListener { querySnapshot->
                     db.collection("Users").document(querySnapshot.documents[0].id).update("image", uri.toString()).addOnSuccessListener {
-                        Log.e("hmd", "DONE")
+                        user.image = uri.toString()
                     }.addOnFailureListener{ exception ->
                         Log.e("hmd", "${exception.message}")
                     }
@@ -121,6 +130,8 @@ class ProfileFragment : Fragment() {
             }
         }.addOnFailureListener{ exception ->
             Log.e("hmd", "${exception.message}")
+            Toast.makeText(act, "Error!!" ,Toast.LENGTH_SHORT).show()
+            progressDialog.dismiss()
         }
     }
 

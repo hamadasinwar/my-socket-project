@@ -97,6 +97,7 @@ class SplashActivity : AppCompatActivity() {
         u.put("id", app.getUser().id)
         u.put("name", app.getUser().name)
         u.put("email", app.getUser().email)
+        u.put("image", app.getUser().image)
         try {
             mSocket.emit("connect user", u)
         } catch (e: JSONException) {
@@ -119,13 +120,15 @@ class SplashActivity : AppCompatActivity() {
             var id: String
             var name: String
             var email: String
+            var image: String
             try {
                 val array = JSONArray(u)
                 for (i in 0 until array.length()){
                     id = (array[i] as JSONObject).getString("id")
                     name = (array[i] as JSONObject).getString("name")
                     email = (array[i] as JSONObject).getString("email")
-                    val connectUser = User(id, name, email, "", "", "", "")
+                    image = (array[i] as JSONObject).getString("image")
+                    val connectUser = User(id, name, email, "", "", "", image)
                     app.addConnectedUser(connectUser)
                 }
             } catch (e: JSONException) {

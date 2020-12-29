@@ -39,7 +39,7 @@ class OnlineAdapter(private val activity: Activity, private val data:List<User>,
         }
         if (data[position].image == ""){
             holder.image.setImageResource(R.drawable.ic_person)
-            holder.image.setPadding(30, 30, 30, 30)
+            holder.image.setPadding(10, 10, 10, 10)
         }else{
             Picasso.get().load(Uri.parse(data[position].image)).into(holder.image)
         }

@@ -2,6 +2,7 @@ package com.example.myapplication.activities
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
@@ -27,6 +28,11 @@ class MainActivity : AppCompatActivity(), AnimatedBottomBar.OnTabSelectListener 
         setContentView(R.layout.activity_main2)
 
         val index = intent.getIntExtra("page", -1)
+        val sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+
+        if (!(sharedPreference.getBoolean("hasConnection", false))){
+            Toast.makeText(this, "no internet connection!", Toast.LENGTH_SHORT).show()
+        }
 
         app = (this.application as App)
         user = app.getUser()

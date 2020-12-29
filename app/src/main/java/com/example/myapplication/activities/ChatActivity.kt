@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -26,19 +25,14 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.nkzawa.emitter.Emitter
 import com.github.nkzawa.socketio.client.Socket
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.image_send.*
 import kotlinx.android.synthetic.main.image_send.view.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
 import java.util.*
 
-
 @Suppress("DEPRECATION")
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : AppCompatActivity(), MessageAdapter.OnClickItem {
 
     private var username: String? = null
     private var hasConnection :Boolean? = null
@@ -73,13 +67,9 @@ class ChatActivity : AppCompatActivity() {
         hasConnection = true
 
         val messageFormatList: List<MessageFormat> = ArrayList()
-        messageAdapter = MessageAdapter(this, R.layout.item_message, messageFormatList)
+        messageAdapter = MessageAdapter(this, R.layout.item_message, messageFormatList, this)
         messageListView.adapter = messageAdapter
         messageAdapter.setImage(userChat.image)
-
-        messageListView.setOnItemClickListener { parent, view, position, id ->
-
-        }
 
         sendButton.setOnClickListener {
             sendMessage()
@@ -173,8 +163,6 @@ class ChatActivity : AppCompatActivity() {
                 if (id == uniqueId) {
                     typingOrNot = false
                 } else {
-                    Log.e("hmd", "$id == ${user.id}")
-                    Log.e("hmd", "$userChatID == ${userChat.id}")
                     if (userChatID == user.id){
                         title = userName
                     }
@@ -271,7 +259,6 @@ class ChatActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (isFinishing) {
-            Log.i(TAG, "onDestroy: ")
             val userId = JSONObject()
             try {
                 userId.put("username", "$username DisConnected")
@@ -304,5 +291,17 @@ class ChatActivity : AppCompatActivity() {
     companion object{
         var uniqueId: String? = null
         const val TAG = "hmd"
+    }
+
+    override fun onImageClick(map: Bitmap?) {
+        val imageView = ImageView(this)
+        imageView.setImageBitmap(map)
+        imageView.setPadding(10, 10, 10, 10)
+        val builder = AlertDialog.Builder(this)
+        builder.setView(imageView)
+        builder.setPositiveButton("Exit"){_, _ -> }
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 }

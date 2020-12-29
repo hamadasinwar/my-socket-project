@@ -7,12 +7,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import com.example.myapplication.activities.ChatActivity
 import com.example.myapplication.R
 import com.example.myapplication.models.MessageFormat
@@ -20,22 +20,25 @@ import com.squareup.picasso.Picasso
 import java.util.*
 
 @SuppressLint("CutPasteId")
-class MessageAdapter(context: Context, resource: Int, objects: List<MessageFormat>)
+class MessageAdapter(context: Context, resource: Int, objects: List<MessageFormat>, private val onClickItem: OnClickItem)
     :ArrayAdapter<MessageFormat>(context, resource, objects) {
 
-    var profileImage = ""
+    private var profileImage = ""
     override fun getView(position: Int, cv: View?, parent: ViewGroup): View {
 
         val convertView: View?
         val message = getItem(position)!!
-        Log.e("hmd", "${message.id} ${message.message}")
 
         if (message.getIsImage()){
             when (message.id) {
                 ChatActivity.uniqueId -> {
                     convertView = (context as Activity).layoutInflater.inflate(R.layout.my_image, parent, false)
                     val image = convertView.findViewById<ImageView>(R.id.message_body)
+                    val card = convertView.findViewById<CardView>(R.id.card)
                     image.setImageBitmap(decodeImage(message.message!!))
+                    card.setOnClickListener {
+                        onClickItem.onImageClick(decodeImage(message.message!!))
+                    }
                 }
                 else -> {
                     convertView = (context as Activity).layoutInflater.inflate(R.layout.thier_image, parent, false)
@@ -82,5 +85,9 @@ class MessageAdapter(context: Context, resource: Int, objects: List<MessageForma
     private fun decodeImage(data: String): Bitmap?{
         val b: ByteArray = Base64.getDecoder().decode(data)
         return BitmapFactory.decodeByteArray(b, 0, b.size)
+    }
+
+    interface OnClickItem{
+        fun onImageClick(map: Bitmap?)
     }
 }

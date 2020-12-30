@@ -48,6 +48,10 @@ class MessageAdapter(context: Context, resource: Int, objects: List<MessageForma
                     image.setImageBitmap(decodeImage(message.message!!))
                     usernameText.text = message.username
                     Picasso.get().load(Uri.parse(profileImage)).into(avatar)
+                    val card = convertView.findViewById<CardView>(R.id.thierCard)
+                    card.setOnClickListener {
+                        onClickItem.onImageClick(decodeImage(message.message!!))
+                    }
                 }
             }
         }else{

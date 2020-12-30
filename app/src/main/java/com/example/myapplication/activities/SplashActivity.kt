@@ -70,6 +70,7 @@ class SplashActivity : AppCompatActivity() {
             }
             users = app.getAllUsers()
             db.collection("Groups").get().addOnSuccessListener { snapshot ->
+                user = app.getUser()
                 for (document in snapshot){
                     val json = document.get("users").toString()
                     val jArray = JSONArray(json)
@@ -82,6 +83,7 @@ class SplashActivity : AppCompatActivity() {
                         }
                     }
                     if (json.contains(user.id)){
+                        Log.e("hmd", "${user.id} ${user.email}")
                         app.addGroup(Group(document.get("id").toString(), document.get("name").toString(), groupUsers.distinct() as MutableList))
                     }
                 }

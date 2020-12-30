@@ -56,6 +56,7 @@ class GroupChatActivity : AppCompatActivity() {
         for (g in app.getAllGroups()){
             if (g.id == groupID){
                 group = g
+                Log.e("hmd", g.name)
             }
         }
         for (u in group.users){

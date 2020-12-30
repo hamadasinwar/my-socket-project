@@ -44,6 +44,7 @@ class ChatActivity : AppCompatActivity(), MessageAdapter.OnClickItem {
     private lateinit var app : App
     private lateinit var user: User
     private lateinit var userChat:User
+    private var ids = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +57,8 @@ class ChatActivity : AppCompatActivity(), MessageAdapter.OnClickItem {
         username = user.name
         uniqueId = user.id
         title = userChat.name
+        ids += "${user.id}, "
+        ids += userChat.id
         val sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
 
@@ -144,7 +147,7 @@ class ChatActivity : AppCompatActivity(), MessageAdapter.OnClickItem {
                 userChatID = data.get("userChat").toString()
                 val format = MessageFormat(id, username, message)
 
-                if ((userChatID == user.id || id == user.id) && userChatID != id) {
+                if (ids.contains(userChatID) && ids.contains(id)) {
                     messageAdapter.add(format)
                 }
             } catch (e: Exception) {
@@ -163,7 +166,7 @@ class ChatActivity : AppCompatActivity(), MessageAdapter.OnClickItem {
                 if (id == uniqueId) {
                     typingOrNot = false
                 } else {
-                    if (userChatID == user.id){
+                    if (ids.contains(userChatID) && ids.contains(id)){
                         title = userName
                     }
                 }
@@ -208,7 +211,7 @@ class ChatActivity : AppCompatActivity(), MessageAdapter.OnClickItem {
                 val format = MessageFormat(id, username, image)
                 format.setIsImage()
 
-                if ((userChatID == user.id || id == user.id) && userChatID != id) {
+                if (ids.contains(userChatID) && ids.contains(id)) {
                     messageAdapter.add(format)
                 }
             } catch (e: Exception) {

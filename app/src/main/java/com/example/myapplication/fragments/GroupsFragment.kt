@@ -18,7 +18,6 @@ import com.example.myapplication.models.Group
 import com.example.myapplication.models.User
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_groups.view.*
-import org.json.JSONArray
 
 class GroupsFragment : Fragment(), GroupAdapter.OnClickItem {
 
@@ -45,29 +44,8 @@ class GroupsFragment : Fragment(), GroupAdapter.OnClickItem {
         root.rvGroups.layoutManager = LinearLayoutManager(act)
         root.rvGroups.adapter = adapter
 
-        db.collection("Groups").get().addOnSuccessListener { snapshot ->
-            groups = mutableListOf()
-            val us = users
-            us.add(user)
-            for (document in snapshot){
-                val json = document.get("users").toString()
-                val jArray = JSONArray(json)
-                val groupUsers = mutableListOf<User>()
-                for (x in 0 until jArray.length()){
-                    for (u in us){
-                        if (u.id == jArray[x].toString()){
-                            groupUsers.add(u)
-                        }
-                    }
-                }
-                if (json.contains(user.id)){
-                    val g = Group(document.get("id").toString(), document.get("name").toString(), groupUsers.distinct() as MutableList)
-                    groups.add(g)
-                }
-            }
-            adapter = GroupAdapter(act, groups, this)
-            root.rvGroups.adapter = adapter
-        }
+        adapter = GroupAdapter(act, groups, this)
+        root.rvGroups.adapter = adapter
 
         root.btn_add_group.setOnClickListener {
             val i = Intent(act, CreateGroupActivity::class.java)
